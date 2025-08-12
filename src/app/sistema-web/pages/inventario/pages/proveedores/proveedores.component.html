@@ -1,0 +1,68 @@
+<div class="container">
+  <h2>Lista de Proveedores</h2>
+
+  <button class="btn btn-success mb-3" (click)="abrirModal()">Nuevo Proveedor</button>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Dirección</th>
+        <th>Ruc</th>
+        <th>Email</th>
+        <th>Teléfono</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let proveedor of proveedores">
+        <td>{{ proveedor.nombre }}</td>
+        <td>{{ proveedor.direccion }}</td>
+        <td>{{proveedor.ruc}}</td>
+        <td>{{proveedor.email}}</td>
+        <td>{{ proveedor.telefono }}</td>
+        <td>
+          <button class="btn btn-warning btn-sm me-2" (click)="abrirModal(proveedor)">Editar</button>
+          <button class="btn btn-danger btn-sm" (click)="eliminarProveedor(proveedor.proveedor_id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalProveedor" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form (ngSubmit)="guardarProveedor()">
+        <div class="modal-header">
+      
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+       <div class="modal-body">
+          <label for="nombre"><strong>Ruc:</strong></label>
+          <input id="nombre" class="form-control mb-2" [(ngModel)]="proveedorSeleccionado.ruc" [disabled]="editarProveedor" name="ruc" required placeholder="Ruc">
+
+          <label for="nombre"><strong>Nombre:</strong></label>
+          <input id="nombre" class="form-control mb-2" [(ngModel)]="proveedorSeleccionado.nombre" name="nombre" required placeholder="Nombre">
+
+          <label for="razon_social"><strong>Razón Social:</strong></label>
+          <input id="razon_social" class="form-control mb-2" [(ngModel)]="proveedorSeleccionado.razon_social" name="razon_social" required placeholder="Razón Social">
+
+          <label for="email"><strong>Correo Electrónico:</strong></label>
+          <input id="email" class="form-control mb-2" [(ngModel)]="proveedorSeleccionado.email" name="email" required placeholder="Correo electrónico">
+
+          <label for="direccion"><strong>Dirección:</strong></label>
+          <input id="direccion" class="form-control mb-2" [(ngModel)]="proveedorSeleccionado.direccion" name="direccion" required placeholder="Dirección">
+
+          <label for="telefono"><strong>Teléfono:</strong></label>
+          <input id="telefono" class="form-control mb-2" [(ngModel)]="proveedorSeleccionado.telefono" name="telefono" required placeholder="Teléfono">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Guardar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,73 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Categorías</h2>
+
+  <!-- Formulario para registrar nueva categoría -->
+  <form (ngSubmit)="registrarCategoria()" class="mb-4">
+    <div class="mb-3">
+      <label for="nombre" class="form-label">Nombre de la categoría</label>
+      <input
+        type="text"
+        id="nombre"
+        name="nombre"
+        class="form-control"
+        [(ngModel)]="nuevaCategoria"
+        required
+      />
+    </div>
+    <button type="submit" class="btn btn-primary">
+      Registrar
+    </button>
+  </form>
+
+  <!-- Lista de categorías -->
+  <div *ngIf="categorias.length > 0; else sinCategorias">
+    <table class="table table-bordered">
+      <thead class="table-light">
+        <tr>
+          <th>#</th>
+          <th>Nombre</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let categoria of categorias; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ categoria.nombre }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2"(click)="editarCategoria(categoria)">
+              Editar
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="eliminarCategoria(categoria)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+<!-- Modal -->
+<div class="modal fade" id="editarCategoriaModal" tabindex="-1" aria-labelledby="editarCategoriaLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editarCategoriaLabel">Editar Categoría</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" class="form-control" [(ngModel)]="categoriaSeleccionada.nombre">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="guardarCambios()">Actualizar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <ng-template #sinCategorias>
+    <div class="alert alert-info">No hay categorías registradas.</div>
+  </ng-template>
+</div>

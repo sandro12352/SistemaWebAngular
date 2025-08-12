@@ -1,0 +1,56 @@
+<div class="bg-dark text-white vh-100 p-3" style="width: 250px;min-height: 100%;">
+  <h4 class="text-center">Dashboard</h4>
+  <ul class="nav flex-column">
+
+    <!-- Menú desplegable de Ventas -->
+    <li class="nav-item">
+      <a class="nav-link text-white d-flex justify-content-between align-items-center"
+         data-bs-toggle="collapse" href="#ventasMenu" role="button"
+         aria-expanded="false" aria-controls="ventasMenu">
+        <span>Ventas</span>
+        <i class="bi bi-chevron-down arrow-icon"></i>
+      </a>
+      <div class="collapse ps-3" id="ventasMenu">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a routerLink="/app/ventas/registrar" routerLinkActive="active" class="nav-link text-white">Registrar Ventas</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/app/ventas/ver" routerLinkActive="active" class="nav-link text-white">Ver Ventas</a>
+          </li>
+        </ul>
+      </div>
+    </li>
+
+    <!-- Menú desplegable de Inventario -->
+    <li class="nav-item">
+      <a class="nav-link text-white d-flex justify-content-between align-items-center"
+         data-bs-toggle="collapse" href="#inventarioMenu" role="button"
+         aria-expanded="false" aria-controls="inventarioMenu">
+        <span>Inventario</span>
+        <i class="bi bi-chevron-down arrow-icon"></i>
+      </a>
+      <div class="collapse ps-3" id="inventarioMenu">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a routerLink="/app/inventario/productos" routerLinkActive="active" class="nav-link text-white">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/app/inventario/categorias" routerLinkActive="active" class="nav-link text-white">Categorías</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/app/inventario/proveedores" routerLinkActive="active" class="nav-link text-white">Proveedores</a>
+          </li>
+        </ul>
+      </div>
+    </li>
+
+    <!-- Otros menús -->
+    <li class="nav-item">
+      <a routerLink="/logistica" class="nav-link text-white">Logística</a>
+    </li>
+    <li class="nav-item">
+      <a routerLink="/marketing" class="nav-link text-white">Marketing</a>
+    </li>
+  </ul>
+</div>
