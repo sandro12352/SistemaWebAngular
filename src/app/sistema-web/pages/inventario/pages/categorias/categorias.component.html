@@ -9,7 +9,7 @@
         type="text"
         id="nombre"
         name="nombre"
-        class="form-control"
+        class="form-control " style="width: 15%;"
         [(ngModel)]="nuevaCategoria"
         required
       />
@@ -20,7 +20,7 @@
   </form>
 
   <!-- Lista de categorías -->
-  <div *ngIf="categorias.length > 0; else sinCategorias">
+  <div>
     <table class="table table-bordered">
       <thead class="table-light">
         <tr>
@@ -30,44 +30,57 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let categoria of categorias; let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ categoria.nombre }}</td>
-          <td>
-            <button class="btn btn-sm btn-warning me-2"(click)="editarCategoria(categoria)">
-              Editar
-            </button>
-            <button class="btn btn-sm btn-danger" (click)="eliminarCategoria(categoria)">
-              Eliminar
-            </button>
+        <!-- 1️⃣ Placeholder mientras carga -->
+        <ng-container *ngIf="isLoading">
+          <tr *ngFor="let _ of categorias">
+            <td><span class="placeholder col-4 placeholder-wave rounded-1"></span></td>
+            <td><span class="placeholder col-8 placeholder-wave rounded-1"></span></td>
+            <td><span class="placeholder col-6 placeholder-wave rounded-1"></span></td>
+          </tr>
+        </ng-container>
+
+        <!-- 2️⃣ Mensaje si no hay categorías -->
+        <tr *ngIf="!isLoading && categorias.length === 0">
+          <td colspan="3" class="text-center text-muted py-4">
+            <i class="bi bi-tags"></i> No hay categorías registradas.
           </td>
         </tr>
+
+        <!-- 3️⃣ Lista real -->
+        <ng-container *ngIf="!isLoading && categorias.length > 0">
+          <tr *ngFor="let categoria of categorias; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ categoria.nombre }}</td>
+            <td>
+              <button class="btn btn-sm btn-warning me-2" (click)="editarCategoria(categoria)">
+                Editar
+              </button>
+              <button class="btn btn-sm btn-danger" (click)="eliminarCategoria(categoria)">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        </ng-container>
       </tbody>
     </table>
   </div>
 
-<!-- Modal -->
-<div class="modal fade" id="editarCategoriaModal" tabindex="-1" aria-labelledby="editarCategoriaLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editarCategoriaLabel">Editar Categoría</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        <input type="text" class="form-control" [(ngModel)]="categoriaSeleccionada.nombre">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-primary" (click)="guardarCambios()">Actualizar</button>
+  <!-- Modal -->
+  <div class="modal fade" id="editarCategoriaModal" tabindex="-1" aria-labelledby="editarCategoriaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editarCategoriaLabel">Editar Categoría</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" class="form-control" [(ngModel)]="categoriaSeleccionada.nombre">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" (click)="guardarCambios()">Actualizar</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-
-
-  <ng-template #sinCategorias>
-    <div class="alert alert-info">No hay categorías registradas.</div>
-  </ng-template>
 </div>

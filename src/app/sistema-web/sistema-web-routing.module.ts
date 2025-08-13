@@ -17,7 +17,7 @@ const routes: Routes = [
         loadChildren:()=>import('./pages/ventas/ventas.module').then(m=>m.VentasModule)
       },
       {path:'inventario',
-        loadChildren:()=>import('./pages/inventario/inventario-routing.module').then(m=>m.InventarioRoutingModule)
+        loadChildren:()=>import('./pages/inventario/inventario.module').then(m=>m.InventarioModule)
       },
     ]
   },

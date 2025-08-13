@@ -12,3 +12,34 @@
   background-color: rgba(255, 255, 255, 0.2);
   font-weight: bold;
 }
+
+.btn-hover:hover {
+  background-color: rgba(255, 255, 255, 0.15); /* Un blanco translúcido */
+}
+
+
+.sidebar {
+  width: 250px;
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+  padding: 1rem;
+}
+
+.sidebar.collapsed {
+  width:0;
+  padding: 0;
+}
+
+.sidebar .menu-item {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar.collapsed .menu-text {
+  display: none;
+  visibility: hidden;
+}
+
+.sidebar .nav-link {
+  white-space: nowrap;
+}

@@ -12,15 +12,22 @@ export class CategoriasComponent implements OnInit{
   categorias:Categoria[] = [];
   nuevaCategoria:string ='';
   categoriaSeleccionada: Categoria = { categoria_id: 0, nombre: '' };
+  isLoading = true;
   constructor(
     private categoriaService:CategoriasService
   ){}
 
    ngOnInit(): void {
      this.categoriaService.getCategorias()
-     .subscribe(resp=>{
-      this.categorias = resp
-    
+     .subscribe({
+      next: (data) => {
+      this.categorias = data;
+      this.isLoading = false; // Se desactiva cuando llegan los datos
+    },
+    error: (err) => {
+      console.error(err);
+      this.isLoading = false;
+    }
      })
     }
   registrarCategoria() {

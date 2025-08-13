@@ -1,56 +1,109 @@
-<div class="bg-dark text-white vh-100 p-3" style="width: 250px;min-height: 100%;">
-  <h4 class="text-center">Dashboard</h4>
-  <ul class="nav flex-column">
+<!-- Contenedor principal -->
+<div [class.collapsed]="!isVisible" class="sidebar vh-100 bg-dark text-white  d-flex flex-column "  id="sidebar"
+    >
 
-    <!-- Menú desplegable de Ventas -->
-    <li class="nav-item">
-      <a class="nav-link text-white d-flex justify-content-between align-items-center"
-         data-bs-toggle="collapse" href="#ventasMenu" role="button"
-         aria-expanded="false" aria-controls="ventasMenu">
-        <span>Ventas</span>
-        <i class="bi bi-chevron-down arrow-icon"></i>
-      </a>
-      <div class="collapse ps-3" id="ventasMenu">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a routerLink="/app/ventas/registrar" routerLinkActive="active" class="nav-link text-white">Registrar Ventas</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/app/ventas/ver" routerLinkActive="active" class="nav-link text-white">Ver Ventas</a>
-          </li>
-        </ul>
-      </div>
-    </li>
+  <div  class="flex-grow-1">
+    <div *ngIf="isVisible">
+        <h4 class="text-center mb-4">
+        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+        </h4>
+    </div>
+   
+  
+    <ul class="nav flex-column flex-grow-1" >
+      <!-- Ventas -->
+      <li class="nav-item">
+        <a class="nav-link text-white d-flex justify-content-between align-items-center"
+          data-bs-toggle="collapse" href="#ventasMenu" role="button"
+          aria-expanded="false" aria-controls="ventasMenu">
+          <span class="menu-item">
+            <i class="bi bi-cart-fill me-2"></i> 
+            <span class="menu-text">Ventas</span> 
+          </span>
+          <i class="bi bi-chevron-down"></i>
+        </a>
+        <div class="collapse ps-3" id="ventasMenu">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a routerLink="/app/ventas/registrar" class="nav-link text-white">
+                <i class="bi bi-plus-square me-2"></i> Registrar Ventas
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/app/ventas/ver" class="nav-link text-white">
+                <i class="bi bi-eye me-2"></i> Ver Ventas
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
 
-    <!-- Menú desplegable de Inventario -->
-    <li class="nav-item">
-      <a class="nav-link text-white d-flex justify-content-between align-items-center"
-         data-bs-toggle="collapse" href="#inventarioMenu" role="button"
-         aria-expanded="false" aria-controls="inventarioMenu">
-        <span>Inventario</span>
-        <i class="bi bi-chevron-down arrow-icon"></i>
-      </a>
-      <div class="collapse ps-3" id="inventarioMenu">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a routerLink="/app/inventario/productos" routerLinkActive="active" class="nav-link text-white">Productos</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/app/inventario/categorias" routerLinkActive="active" class="nav-link text-white">Categorías</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/app/inventario/proveedores" routerLinkActive="active" class="nav-link text-white">Proveedores</a>
-          </li>
-        </ul>
-      </div>
-    </li>
+      <!-- Inventario -->
+      <li class="nav-item">
+        <a class="nav-link text-white d-flex justify-content-between align-items-center"
+          data-bs-toggle="collapse" href="#inventarioMenu" role="button"
+          aria-expanded="false" aria-controls="inventarioMenu">
+          <span><i class="bi bi-box-seam me-2"></i> Inventario</span>
+          <i class="bi bi-chevron-down"></i>
+        </a>
+        <div class="collapse ps-3" id="inventarioMenu">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a routerLink="/app/inventario/productos" class="nav-link text-white">
+                <i class="bi bi-basket-fill me-2"></i> Productos
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/app/inventario/categorias" class="nav-link text-white">
+                <i class="bi bi-tags-fill me-2"></i> Categorías
+              </a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/app/inventario/proveedores" class="nav-link text-white">
+                <i class="bi bi-truck me-2"></i> Proveedores
+              </a>
+            </li>
+          </ul>
+        </div>
+      </li>
 
-    <!-- Otros menús -->
-    <li class="nav-item">
-      <a routerLink="/logistica" class="nav-link text-white">Logística</a>
-    </li>
-    <li class="nav-item">
-      <a routerLink="/marketing" class="nav-link text-white">Marketing</a>
-    </li>
-  </ul>
+      <!-- Otros -->
+      <li class="nav-item">
+        <a routerLink="/logistica" class="nav-link text-white">
+          <i class="bi bi-geo-alt-fill me-2"></i> Logística
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/marketing" class="nav-link text-white">
+          <i class="bi bi-megaphone-fill me-2"></i> Marketing
+        </a>
+      </li>
+    </ul>
+
+   
+  
+  </div>
+
+
+  
+
+  <div class="d-flex justify-content-between align-items-center pt-2">
+    <span *ngIf="isVisible" class="fw-bold fs-5 m-0">
+      <i class="bi bi-building me-2 text-secondary"></i> PERUVIANCOR
+    </span>
+    <button class="btn btn-hover text-white btn-sm shadow-sm" (click)="toggleSidebar()" *ngIf="isVisible" >
+      <i  class="bi fs-5 bi-layout-sidebar"></i>
+    </button>
+  </div>
 </div>
+
+<!-- Botón para abrir -->
+<button *ngIf="!isVisible" 
+        class="btn btn-hover text-white  position-fixed" 
+        style="bottom: 5px; left: 0px;" 
+        (click)="toggleSidebar()">
+  <i class="bi bg-dark px-2 py-1 rounded bi-layout-split fs-4"></i>
+</button>
+
+
+

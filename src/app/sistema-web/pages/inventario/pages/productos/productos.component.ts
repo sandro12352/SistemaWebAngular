@@ -17,6 +17,7 @@ export class ProductosComponent implements OnInit{
     productos: Producto[] = [];
     categorias:Categoria[]=[];
     proveedores:Proveedor[]=[];
+    isLoading = true;
     productoEditando: Producto = this.nuevoProducto()
 
   constructor(
@@ -32,6 +33,7 @@ export class ProductosComponent implements OnInit{
       });
       this.categoriaService.getCategorias()
       .subscribe(res=>{
+        this.isLoading = false;
         this.categorias = res;
       });
       this.proveedorService.obtenerProveedores()

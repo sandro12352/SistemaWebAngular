@@ -1,3 +1,6 @@
+import { Categoria } from "./categoria.interface";
+import { Proveedor } from "./proveedores.interfaces";
+
 export interface Producto {
   producto_id?: number;
   proveedor_id: number;
@@ -9,4 +12,6 @@ export interface Producto {
   stock: number;
   descripcion: string;
   creado_en?: string;
+  proveedor?:Proveedor
+  categoria?:Categoria
 }

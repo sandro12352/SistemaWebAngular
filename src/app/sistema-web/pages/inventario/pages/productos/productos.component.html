@@ -5,26 +5,51 @@
   <button class="btn btn-primary mb-3" (click)="abrirFormulario()">+ Nuevo Producto</button>
 
   <!-- Tabla de productos -->
-  <table class="table table-bordered table-hover">
-    <thead class="table-dark">
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Proveedor</th>
-        <th>Categoría</th>
-        <th>Compra</th>
-        <th>Venta</th>
-        <th>Fecha</th>
-        <th>Stock</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
+<table class="table table-bordered table-hover">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Proveedor</th>
+      <th>Categoría</th>
+      <th>Compra</th>
+      <th>Venta</th>
+      <th>Fecha</th>
+      <th>Stock</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Placeholder cuando está cargando -->
+    <ng-container *ngIf="isLoading">
+  <tr *ngFor="let producto of productos">
+    <td><span class="placeholder col-8 placeholder-wave rounded-1"></span></td>
+    <td><span class="placeholder col-8 placeholder-wave rounded-1"></span></td>
+    <td><span class="placeholder col-8 placeholder-wave rounded-1"></span></td>
+    <td><span class="placeholder col-8 placeholder-wave rounded-1"></span></td>
+    <td><span class="placeholder col-5 placeholder-wave rounded-1"></span></td>
+    <td><span class="placeholder col-5 placeholder-wave rounded-1"></span></td>
+    <td><span class="placeholder col-7 placeholder-wave rounded-1"></span></td>
+    <td><span class="placeholder col-4 placeholder-wave rounded-1"></span></td>
+    <td><span class="placeholder col-4 placeholder-wave rounded-1"></span></td>
+  </tr>
+</ng-container>
+
+   <!-- 2️⃣ Mensaje si no hay productos -->
+  <tr *ngIf="!isLoading && productos.length === 0">
+    <td colspan="9" class="text-center text-muted py-4">
+      <i class="bi bi-box-seam"></i> No hay productos
+    </td>
+  </tr>
+
+
+    <!-- Datos reales cuando termina de cargar -->
+    <ng-container *ngIf="!isLoading && productos.length > 0">
       <tr *ngFor="let producto of productos">
         <td>{{ producto.producto_id }}</td>
         <td>{{ producto.nombre }}</td>
-        <td>{{ getProveedorNombre(producto.proveedor_id) }}</td>
-        <td>{{ getCategoriaNombre(producto.categoria_id) }}</td>
+        <td>{{ producto.proveedor?.nombre }}</td>
+        <td>{{ producto.categoria?.nombre }}</td>
         <td>S/{{ producto.valor_compra }}</td>
         <td>S/{{ producto.valor_venta }}</td>
         <td>{{ producto.fecha_compra | date:'dd/MM/yyyy HH:mm' }}</td>
@@ -34,8 +59,10 @@
           <button class="btn btn-sm btn-danger" (click)="eliminarProducto(producto.producto_id)">Eliminar</button>
         </td>
       </tr>
-    </tbody>
-  </table>
+    </ng-container>
+  </tbody>
+</table>
+
 
   <!-- Modal para crear/editar producto -->
   <div class="modal fade" id="productoModal" tabindex="-1" aria-hidden="true">

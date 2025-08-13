@@ -6,6 +6,21 @@ import { Component } from '@angular/core';
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent {
-  isVentasMenuOpen = false;
+  
+  isVisible = true;
+  isAnimating = false;
+  toggleSidebar() {
+  if (this.isVisible) {
+    this.isVisible = false;
+  } else {
+    this.isVisible = true;
+  }
+}
+
+
+
+
+
+
 
 }
