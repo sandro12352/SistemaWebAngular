@@ -7,5 +7,6 @@ export interface Cliente {
   telefono: string;
   email?: string | null;
   direccion: string;
+  departamento:string;
   creado_en?: string;
 }

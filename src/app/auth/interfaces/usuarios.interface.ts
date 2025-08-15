@@ -1,3 +1,5 @@
+import { Trabajador } from "./trabajadores.interfaces";
+
 export enum RolUsuario {
   Admin = 'admin',
   Ventas = 'ventas',
@@ -10,5 +12,6 @@ export interface Usuario {
   email: string;
   contrasena: string;
   rol: RolUsuario;
+  trabajador:Trabajador
   creado_en?: Date;
 }

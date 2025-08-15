@@ -17,6 +17,9 @@ export class ProductosService {
     return this.http.get<Producto[]>(`${envs.api}/productos`);
   }
 
+  actualizarProductos(productos: { producto_id: number, stock: number }[]):Observable<Producto[]> {
+      return this.http.put<Producto[]>(`${envs.api}/productos/actualizar-stock`, productos);
+    }
 
   crearProducto(producto:Producto):Observable<Producto>{
     return this.http.post<Producto>(`${envs.api}/productos`,producto);

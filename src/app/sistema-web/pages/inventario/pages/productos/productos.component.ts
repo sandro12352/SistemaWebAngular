@@ -27,19 +27,21 @@ export class ProductosComponent implements OnInit{
   ){}
 
   ngOnInit(): void {
-      this.productoService.getProductos()
+     this.proveedorService.obtenerProveedores()
       .subscribe(res=>{
-        this.productos = res;
+        this.proveedores=res;
       });
-      this.categoriaService.getCategorias()
+     this.categoriaService.getCategorias()
       .subscribe(res=>{
         this.isLoading = false;
         this.categorias = res;
       });
-      this.proveedorService.obtenerProveedores()
+     
+      this.productoService.getProductos()
       .subscribe(res=>{
-        this.proveedores=res;
+        this.productos = res;
       });
+     
   }
 
 
@@ -52,17 +54,11 @@ export class ProductosComponent implements OnInit{
       valor_venta: 0,
       fecha_compra: '',
       stock: 0,
-      descripcion: ''
+      descripcion: '',
     };
   }
 
-  getProveedorNombre(id: number): string {
-    return this.proveedores.find(p => p.proveedor_id === id)?.nombre || '';
-  }
-
-  getCategoriaNombre(id: number): string {
-    return this.categorias.find(c => c.categoria_id=== id)?.nombre || '';
-  }
+  
 
    guardarProducto() {
     if (this.productoEditando.producto_id) {
@@ -87,6 +83,7 @@ export class ProductosComponent implements OnInit{
 
   editarProducto(p: Producto) {
     this.productoEditando = { ...p };
+    console.log(p.categoria_id,p.producto_id)
     new bootstrap.Modal(document.getElementById('productoModal')).show();
   }
 

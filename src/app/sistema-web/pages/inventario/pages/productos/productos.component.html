@@ -81,7 +81,7 @@
           <div class="mb-2">
             <label>Proveedor</label>
             <select class="form-select" [(ngModel)]="productoEditando.proveedor_id" name="proveedor_id" required>
-              <option *ngFor="let p of proveedores" [value]="p.proveedor_id">{{ p.nombre }}</option>
+              <option  *ngFor="let p of proveedores" [value]="p.proveedor_id">{{ p.nombre }}</option>
             </select>
           </div>
 

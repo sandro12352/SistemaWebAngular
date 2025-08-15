@@ -20,16 +20,16 @@ export class RegistrarVentaComponent implements OnInit{
    @ViewChild('modalCarga', { static: false }) modalCargaRef!: ElementRef;
   @ViewChild('modalExito', { static: false }) modalExitoRef!: ElementRef;
 
-  mostrarToast = false;
+  loadingCliente = false;
 
   usuario!:Usuario;
   registrarClienteForm:FormGroup;
-  dniCliente: string = '';
+  dniCliente?: string;
   mensajeError: string | null = null;
   mensajeErrorDni?:string;
   cliente: Cliente | null = null;
   busquedaRealizada: boolean = false;
-  nuevoCliente: Cliente = { dni: '', nombre: '', email: '', direccion: '' ,apellidos:'',telefono:''};
+  nuevoCliente: Cliente = { dni: '', nombre: '', email: '', direccion: '' ,apellidos:'',telefono:'',departamento:''};
 
   // Productos
   productos: Producto[] = [];
@@ -41,6 +41,16 @@ export class RegistrarVentaComponent implements OnInit{
   precioVentaSeleccionado?:number;
   comentarioVenta?:string;
 
+
+  //Departamentos
+  departamentos: string[] = [
+    'Amazonas', 'Áncash', 'Apurímac', 'Arequipa', 'Ayacucho', 'Cajamarca',
+    'Callao', 'Cusco', 'Huancavelica', 'Huánuco', 'Ica', 'Junín', 'La Libertad',
+    'Lambayeque', 'Lima', 'Loreto', 'Madre de Dios', 'Moquegua', 'Pasco',
+    'Piura', 'Puno', 'San Martín', 'Tacna', 'Tumbes', 'Ucayali'
+  ];
+
+
   constructor(
     private clienteService: ClientesService,
     private productoService: ProductosService,
@@ -48,13 +58,28 @@ export class RegistrarVentaComponent implements OnInit{
     private fb:FormBuilder,
   ) {
     this.registrarClienteForm = this.fb.group({
-      dni:['',[Validators.required,Validators.maxLength(8),Validators.minLength(8)]],
+      dni:['',[Validators.maxLength(8),Validators.minLength(8)]],
       nombre:['',[Validators.required]],
       apellidos:['',[Validators.required]],
       telefono:['',[Validators.required,Validators.maxLength(9),Validators.minLength(9)]],
       email:['',[Validators.email]],
-      direccion:['',[Validators.required]]
+      direccion:['',[Validators.required]],
+      departamento: ['', Validators.required],
     })
+
+    this.registrarClienteForm.get('departamento')?.valueChanges.subscribe(dep => {
+      const dniControl = this.registrarClienteForm.get('dni');
+
+      if (dep && dep.toLowerCase() !== 'lima') {
+        // Departamentos distintos de Lima → DNI requerido
+        dniControl?.setValidators([Validators.required, Validators.maxLength(8), Validators.minLength(8)]);
+      } else {
+        // Lima → DNI opcional
+        dniControl?.setValidators([Validators.maxLength(8), Validators.minLength(8)]);
+      }
+
+      dniControl?.updateValueAndValidity(); // refrescar validadores
+    });
   }
 
   ngOnInit(): void { 
@@ -72,33 +97,36 @@ export class RegistrarVentaComponent implements OnInit{
   }
 
   buscarCliente() {
-    if (!this.dniCliente || this.dniCliente.trim() === '') {
+  // Reiniciar estados
+  this.cliente = null;
+  this.mensajeErrorDni = '';
+  this.loadingCliente = false;
+  this.busquedaRealizada = false;
+
+  if (!this.dniCliente || this.dniCliente.trim() === '') {
     this.mensajeErrorDni = 'Debe agregar un DNI';
-    this.mostrarToast = true;
-    setTimeout(() => {
-      this.mostrarToast = false;
-    }, 3000);
-    this.busquedaRealizada = true;
-    this.cliente = null;
     return;
   }
-    this.clienteService.buscarPorDni(this.dniCliente).subscribe({
-      next: (resp) => {
-        console.log(this.dniCliente)
+
+  this.loadingCliente = true; // empieza la carga
+  this.clienteService.buscarPorDni(this.dniCliente).subscribe({
+    next: (resp) => {
+      this.loadingCliente = false; // termina la carga
+      if (resp) {
         this.cliente = resp;
-        this.busquedaRealizada = true;
-      },
-      error: () => {
-        this.cliente = null;
-         this.mostrarToast = true;
-         setTimeout(() => {
-          this.mostrarToast = false;
-        }, 3000);
-        this.busquedaRealizada = true;
-        this.mensajeErrorDni = 'Cliente no encontrado."Registrar cliente".';
+      } else {
+        this.mensajeErrorDni = 'Cliente no encontrado. "Registrar cliente".';
       }
-    });
-  }
+      this.busquedaRealizada = true;
+    },
+    error: () => {
+      this.loadingCliente = false; // termina la carga
+      this.mensajeErrorDni = 'Ocurrió un error al buscar el cliente.';
+      this.busquedaRealizada = true;
+    }
+  });
+}
+
 
   guardarCliente() {
   if (this.registrarClienteForm.invalid) {
@@ -106,17 +134,19 @@ export class RegistrarVentaComponent implements OnInit{
     return;
   }
 
+
   this.nuevoCliente = {
-  ...this.registrarClienteForm.value,
-  email: this.registrarClienteForm.value.email?.trim() === '' ? null : this.registrarClienteForm.value.email
-};
+    ...this.registrarClienteForm.value,
+    dni: this.registrarClienteForm.value.dni?.trim() === '' ? null : this.registrarClienteForm.value.dni,
+    email: this.registrarClienteForm.value.email?.trim() === '' ? null : this.registrarClienteForm.value.email
+  };
+
   this.clienteService.crearCliente(this.nuevoCliente).subscribe({
     next: (cliente) => {
       this.cliente = cliente;
-      this.dniCliente = cliente.dni;
+      this.dniCliente='';
       this.busquedaRealizada = true;
       this.registrarClienteForm.reset();
-
       const modalElement = document.getElementById('modalCliente');
       if (modalElement) {
         const modal = bootstrap.Modal.getInstance(modalElement);
@@ -124,9 +154,7 @@ export class RegistrarVentaComponent implements OnInit{
       }
     },
     error:(error)=>{
-
       this.mensajeError = error.error.error; // Mostrar mensaje del backend
-      
     }
   });
   }
@@ -139,7 +167,10 @@ export class RegistrarVentaComponent implements OnInit{
 
   agregarProducto() {
     const producto = this.productos.find(p => p.producto_id === +this.productoSeleccionadoId);
-    if (!producto || this.cantidadSeleccionada > producto.stock || this.cantidadSeleccionada <= 0) return;
+    if (!producto) return;
+
+    // Verificar contra stock temporal (el que ya vamos reduciendo en memoria)
+   if (this.cantidadSeleccionada > producto.stock || this.cantidadSeleccionada <= 0) return;
 
       // Si no escribe precio, usar el precio original
     const precioUnitario = this.precioVentaSeleccionado && this.precioVentaSeleccionado > 0
@@ -152,14 +183,28 @@ export class RegistrarVentaComponent implements OnInit{
     } else {
       this.productosVenta.push({ ...producto, cantidad: this.cantidadSeleccionada,valor_venta:precioUnitario });
     }
+    
 
+     // Reducir stock temporal
+      producto.stock -= this.cantidadSeleccionada;
     // Restablecer selección
    
     this.cantidadSeleccionada = 1;
   }
 
   quitarProducto(index: number) {
-    this.productosVenta.splice(index, 1);
+    const productoVenta = this.productosVenta[index]; // El producto que está en el carrito
+  if (!productoVenta) return;
+
+  // Buscar en el listado de productos y devolver el stock
+  const productoOriginal = this.productos.find(p => p.producto_id === productoVenta.producto_id);
+  if (productoOriginal) {
+    productoOriginal.stock += productoVenta.cantidad; // Devolver la cantidad eliminada
+  }
+
+  // Eliminar del carrito
+  this.productosVenta.splice(index, 1);
+
   }
 
   calcularTotal(): number {
@@ -216,7 +261,23 @@ export class RegistrarVentaComponent implements OnInit{
                 confirmButtonColor: '#53cd48ff'
               });
             }, 2000);
-            
+           const productosActualizados= this.productosVenta.map(p => ({
+            producto_id: p.producto_id!,
+            stock: p.stock - p.cantidad
+          }));
+        
+          
+            this.productoService.actualizarProductos(productosActualizados)
+              .subscribe({
+                next: () => {
+                  console.log('Stock actualizado correctamente');
+                },
+                error: (err) => {
+                  console.error('Error actualizando stock', err);
+                }
+              });
+
+
             this.limpiarRegistro();
           
           

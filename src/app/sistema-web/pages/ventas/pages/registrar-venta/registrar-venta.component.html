@@ -35,195 +35,185 @@
     </button>
   </div>
 </div>
- <!-- Mensaje si no se encuentra el cliente -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3" *ngIf="mostrarToast">
-  <div class="toast align-items-center border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header bg-warning">
-      <strong class="me-auto text-success">
-        <i class="bi bi-exclamation-triangle text-dark"></i> Alerta
-      </strong>
-    </div>
-    <div class="toast-body">
-      {{ mensajeErrorDni }}
-    </div>
-  </div>
-</div>
 
 
 
+
+ <!-- Datos del cliente encontrados -->
 <!-- Datos del cliente encontrados -->
-<div class="row mt-4">
-  <!-- Datos del cliente -->
-  <div class="col-md-12">
-    <div class="card shadow-sm border-0">
-      <div class="card-header bg-dark text-white">
-        <strong>Datos del Cliente</strong>
-      </div>
+<div class="row mt-4" *ngIf="cliente">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0"><strong>Datos del Cliente</strong></h4>
+    <!-- Botón para abrir el modal -->
+    <button 
+      class="btn btn-success btn-md px-4 shadow-sm" 
+      data-bs-toggle="modal" 
+      data-bs-target="#ventaModal"
+      style="font-weight: 600; letter-spacing: 0.5px;">
+      <i class="bi bi-cart-plus me-2"></i> Registrar Venta
+    </button>
+  </div>
+
+  <!-- Card izquierda -->
+  <div class="col-md-6 mb-3 d-flex">
+    <div class="card shadow-sm border-0 w-100 h-100">
       <div class="card-body">
-        <p><strong>Nombre:</strong> {{ cliente?.nombre }} {{ cliente?.apellidos }}</p>
-        <p><strong>DNI:</strong> {{ cliente?.dni }}</p>
-        <p><strong>Email:</strong> {{ cliente?.email }}</p>
-        <p><strong>Teléfono:</strong> {{ cliente?.telefono }}</p>
-        <p><strong>Dirección:</strong> {{ cliente?.direccion }}</p>
+        <p><strong>Nombre:</strong> {{ cliente.nombre }} {{ cliente.apellidos }}</p>
+        <p><strong>DNI:</strong> {{ cliente.dni }}</p>
+        <p><strong>Email:</strong> {{ cliente.email }}</p>
+        <p><strong>Teléfono:</strong> {{ cliente.telefono }}</p>
       </div>
     </div>
   </div>
-    
 
-  
-</div>
-<!-- Selección de productos -->
-<div class="col-md-12 mt-4">
-  <h2 class="text-primary"><i class="bi bi-shop text-dark"></i> Agrega Productos</h2>
-  <!-- Tipo de Pago -->
-  <div class="row">
-    <!-- Producto -->
-    <div class="mb-3 col-md-6">
-      <label class="form-label">Producto:</label>
-      <select class="form-select mb-3" [(ngModel)]="productoSeleccionadoId" name="productoSeleccionadoId">
-        <option *ngFor="let p of productos" [value]="p.producto_id">
-          {{ p.nombre }} - S/ {{ p.valor_venta }}
-        </option>
-      </select>
-    </div>
-
-    <!-- Canal de Venta -->
-    <div class="mb-3 col-md-3">
-      <label class="form-label">Canal de Venta:</label>
-      <select class="form-select" [(ngModel)]="canalVentaSeleccionado" name="canalVentaSeleccionado">
-        <option value="">Seleccione un canal</option>
-        <option value="shopify">Shopify</option>
-        <option value="whatsApp">Whatsapp</option>
-        <option value="referido">Referido</option>
-      </select>
+  <!-- Card derecha -->
+  <div class="col-md-6 mb-3 d-flex">
+    <div class="card shadow-sm border-0 w-100 h-100">
+      <div class="card-body">
+        <p><strong>Dirección:</strong> {{ cliente.direccion }}</p>
+        <p><strong>Departamento:</strong> {{ cliente.departamento }}</p>
+      </div>
     </div>
   </div>
 
-  <!-- Precio de venta y Cantidad -->
-  <div class="row mb-3">
-    <!-- Precio de Venta -->
-    <div class="col-6 col-md-2">
-      <label class="form-label">Precio de Venta (S/):</label>
-      <input 
-        type="number" 
-        step="0.01" 
-        class="form-control" 
-        [(ngModel)]="precioVentaSeleccionado" 
-        name="precioVentaSeleccionado" 
-        placeholder="Ej: 70.00"
-        [min]="1"
-      />
-    </div>
-
-    <!-- Cantidad -->
-    <div class="col-6 col-md-2">
-      <label class="form-label">Cantidad:</label>
-      <input 
-        type="number" 
-        class="form-control" 
-        [(ngModel)]="cantidadSeleccionada" 
-        name="cantidad" 
-        [max]="stockDisponible" 
-        [min]="1" 
-      />
-      <small class="text-muted">Stock: {{ stockDisponible }}</small>
-    </div>
-  </div>
-
- 
-
-  <!-- Botón agregar -->
-  <div class="mb-3">
-    <button class="btn btn-primary" (click)="agregarProducto()">Agregar</button>
-  </div>
-</div>
-
-
-  <hr />
-  <!-- LISTA DE PRODUCTOS AGREGADOS -->
-<table class="table table-striped mt-3" *ngIf="productosVenta.length > 0">
-  <thead>
-    <tr>
-      <th>Producto</th>
-      <th>Cantidad</th>
-      <th>Precio Unitario</th>
-      <th>Subtotal</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let p of productosVenta; let i = index">
-      <td>{{ p.nombre }}</td>
-      <td>{{ p.cantidad }}</td>
-      <td>S/ {{ p.valor_venta }}</td>
-      <td>S/ {{ p.valor_venta! * p.cantidad }}</td>
-      <td><button class="btn btn-danger btn-sm" (click)="quitarProducto(i)">Quitar</button></td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- Comentario general de la venta -->
-<div class="mb-3 form-floating">
-  
-   <textarea class="form-control" id="comentarioVenta" name="comentarioVenta" rows="3" [(ngModel)]="comentarioVenta" placeholder="Ingrese detalles adicionales sobre esta venta..."  style="height: 100px"></textarea>
-   <label for="comentarioVenta">Comentario de la venta:</label>
-</div>
-
-  <!-- TOTAL -->
-  <div class="d-flex justify-content-between align-items-center my-3">
-    <h4>Total: S/ {{ calcularTotal() }}</h4>
-    <button class="btn btn-warning" [disabled]="!cliente || productosVenta.length === 0 || !canalVentaSeleccionado " (click)="registrarVenta()">Registrar Venta</button>
-  </div>
-  
+  <!-- Historial de ventas del cliente -->
+  <app-listado-ventas 
+    [clienteId]="cliente.cliente_id" 
+    [mostrarResumen]="false">
+  </app-listado-ventas>
 </div>
 
 
 
 
 
+<!-- Modal -->
+<div class="modal fade" id="ventaModal" tabindex="-1" aria-labelledby="ventaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title" id="ventaModalLabel">
+          <i class="bi bi-shop text-dark"></i> Agregar Productos
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      
+      <!-- Body -->
+      <div class="modal-body">
+        <div >
+          
+          <!-- Tipo de Pago y Producto -->
+          <div class="row">
+            <!-- Producto -->
+            <div class="mb-3 col-md-6">
+              <label class="form-label">Producto:</label>
+              <select class="form-select mb-3" [(ngModel)]="productoSeleccionadoId" name="productoSeleccionadoId">
+                <option *ngFor="let p of productos" [value]="p.producto_id">
+                  {{ p.nombre }} - S/ {{ p.valor_venta }}
+                </option>
+              </select>
+            </div>
+            <!-- Canal de Venta -->
+            <div class="mb-3 col-md-3">
+              <label class="form-label">Canal de Venta:</label>
+              <select class="form-select" [(ngModel)]="canalVentaSeleccionado" name="canalVentaSeleccionado">
+                <option value="">Seleccione un canal</option>
+                <option value="shopify">Shopify</option>
+                <option value="whatsApp">Whatsapp</option>
+                <option value="referido">Referido</option>
+              </select>
+            </div>
+          </div>
 
+          <!-- Precio y Cantidad -->
+          <div class="row mb-3">
+            <div class="col-6 col-md-2">
+              <label class="form-label">Precio de Venta (S/):</label>
+              <input type="number" step="0.01" class="form-control" [(ngModel)]="precioVentaSeleccionado"
+                name="precioVentaSeleccionado" placeholder="Ej: 70.00" [min]="1" />
+            </div>
+            <div class="col-6 col-md-2">
+              <label class="form-label">Cantidad:</label>
+              <input type="number" class="form-control" [(ngModel)]="cantidadSeleccionada" name="cantidad"
+                [max]="stockDisponible" [min]="1" />
+              <small class="text-muted">Stock: {{ stockDisponible }}</small>
+            </div>
+          </div>
 
+          <!-- Botón agregar -->
+          <div class="mb-3">
+            <button class="btn btn-primary" (click)="agregarProducto()">Agregar</button>
+          </div>
+          <hr />
 
-<!-- Modal de carga -->
-   <div class="modal fade" #modalCarga id="modalCarga" tabindex="-1" aria-labelledby="CargaModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg rounded-4 text-center p-4">
-      <div class="mb-3">
-        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-          <span class="visually-hidden">Cargando...</span>
+          <!-- Lista de productos -->
+          <table class="table table-striped mt-3" *ngIf="productosVenta.length > 0">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Subtotal</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of productosVenta; let i = index">
+                <td>{{ p.nombre }}</td>
+                <td>{{ p.cantidad }}</td>
+                <td>S/ {{ p.valor_venta }}</td>
+                <td>S/ {{ p.valor_venta! * p.cantidad }}</td>
+                <td><button class="btn btn-danger btn-sm" (click)="quitarProducto(i)">Quitar</button></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Comentario y total -->
+          <div class="mb-3 form-floating">
+            <textarea class="form-control" id="comentarioVenta" name="comentarioVenta" rows="3"
+              [(ngModel)]="comentarioVenta" placeholder="Ingrese detalles adicionales..."
+              style="height: 100px"></textarea>
+            <label for="comentarioVenta">Comentario de la venta:</label>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center my-3">
+            <h4>Total: S/ {{ calcularTotal() }}</h4>
+            <button class="btn btn-warning" [disabled]="!cliente || productosVenta.length === 0 || !canalVentaSeleccionado"
+              (click)="registrarVenta()" data-bs-dismiss="modal">Registrar Venta</button>
+          </div>
+
         </div>
       </div>
-      <h5 class="fw-bold text-primary">Procesando venta</h5>
-      <p class="text-muted mb-0" >Por favor, espera un momento...</p>
+
     </div>
   </div>
 </div>
 
 
-<!-- Modal de Éxito -->
-<div class="modal fade" id="modalExito" #modalExito tabindex="-1" aria-labelledby="ExitoModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content border-0 shadow-lg rounded-4">
-      <div class="modal-body text-center p-5">
-        <!-- Icono circular -->
-        <div class="rounded-circle bg-success bg-opacity-10 d-inline-flex align-items-center justify-content-center mb-4" style="width: 80px; height: 80px;">
-          <i class="bi bi-check-circle-fill text-success fs-1"></i>
-        </div>
-        
-        <!-- Título -->
-        <h4 class="fw-bold text-success mb-2">¡Venta guardada!</h4>
-        
-        <!-- Descripción -->
-        <p class="text-muted mb-4">La información de la venta se registró exitosamente.</p>
-        
-        <!-- Botón -->
-        <button class="btn btn-success px-4 py-2 rounded-pill" data-bs-dismiss="modal">
-          Aceptar
-        </button>
+  <!-- Mensaje de cargando -->
+   <!-- Spinner mientras carga -->
+    <div *ngIf="loadingCliente" >
+      <!-- Spinner de carga centrado -->
+      <div class="d-flex justify-content-center align-items-center" style="height: 00px;">
+        <div class="d-flex flex-column align-items-center">
+            <div class="spinner-border text-info" style="width: 5rem; height: 5rem;" role="status"></div>
+            <p>Cargando datos...</p>
+          </div>
       </div>
+
     </div>
+
+<!-- Mensaje de error -->
+  <div *ngIf="!loadingCliente && mensajeErrorDni" class="alert alert-danger mt-3">
+    {{ mensajeErrorDni }}
   </div>
-</div>  
+
+</div>
+
+
+
 
 
 <!-- MODAL REGISTRAR CLIENTE -->
@@ -240,7 +230,7 @@
       <label>DNI</label>
       <input type="text" class="form-control" formControlName="dni" />
       <small class="text-danger" *ngIf="registrarClienteForm.get('dni')?.invalid && registrarClienteForm.get('dni')?.touched">
-        El DNI es obligatorio y debe tener al menos 8 dígitos.
+        Falta DNI y debe tener al menos 8 dígitos.
       </small>
     </div>
 
@@ -285,6 +275,19 @@
     </div>
      <div *ngIf="mensajeError" class="alert alert-danger text-center" role="alert">
       {{ mensajeError }}
+    </div>
+    <div class="mb-2">
+      <label>Departamento</label>
+      <select class="form-control" formControlName="departamento">
+        <option value="">Seleccione un departamento</option>
+        <option *ngFor="let dep of departamentos" [value]="dep">
+          {{ dep }}
+        </option>
+      </select>
+      <small class="text-danger"
+        *ngIf="registrarClienteForm.get('departamento')?.invalid && registrarClienteForm.get('departamento')?.touched">
+        El departamento es obligatorio.
+      </small>
     </div>
   </div>
   <div class="modal-footer">

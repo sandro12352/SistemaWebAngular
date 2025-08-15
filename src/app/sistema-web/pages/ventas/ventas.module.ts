@@ -6,13 +6,15 @@ import { RegistrarVentaComponent } from './pages/registrar-venta/registrar-venta
 import { VerVentasComponent } from './pages/ver-ventas/ver-ventas.component';
 import { DetalleVentaComponent } from './pages/detalle-venta/detalle-venta.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ListadoVentasComponent } from './components/listado-ventas/listado-ventas.component';
 
 
 @NgModule({
   declarations: [
     RegistrarVentaComponent,
     VerVentasComponent,
-    DetalleVentaComponent
+    DetalleVentaComponent,
+    ListadoVentasComponent,
   ],
   imports: [
     CommonModule,
