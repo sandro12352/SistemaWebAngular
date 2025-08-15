@@ -34,6 +34,14 @@
       Registrar cliente
     </button>
   </div>
+  <div *ngIf="loadingCliente" class="mt-4">
+  <div class="d-flex justify-content-center align-items-center" style="height: 40vh;">
+    <div class="text-center">
+      <div class="spinner-border text-info" style="width: 5rem; height: 5rem;" role="status"></div>
+      <p class="mt-2">Cargando datos...</p>
+    </div>
+  </div>
+</div>
 </div>
 
 
@@ -123,6 +131,7 @@
                 <option value="shopify">Shopify</option>
                 <option value="whatsApp">Whatsapp</option>
                 <option value="referido">Referido</option>
+                <option value="fidelizado">Fidelizado</option>
               </select>
             </div>
           </div>
@@ -192,18 +201,7 @@
 </div>
 
 
-  <!-- Mensaje de cargando -->
-   <!-- Spinner mientras carga -->
-    <div *ngIf="loadingCliente" >
-      <!-- Spinner de carga centrado -->
-      <div class="d-flex justify-content-center align-items-center" style="height: 00px;">
-        <div class="d-flex flex-column align-items-center">
-            <div class="spinner-border text-info" style="width: 5rem; height: 5rem;" role="status"></div>
-            <p>Cargando datos...</p>
-          </div>
-      </div>
-
-    </div>
+ 
 
 <!-- Mensaje de error -->
   <div *ngIf="!loadingCliente && mensajeErrorDni" class="alert alert-danger mt-3">

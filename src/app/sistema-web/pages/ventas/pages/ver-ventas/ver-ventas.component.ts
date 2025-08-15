@@ -32,18 +32,7 @@ export class VerVentasComponent implements OnInit {
     });
   }
 
-  totalMostrado() {
-     let suma = 0;
-  (this.ventasFiltradas || []).forEach(v => {
-    const total = Number(v.total);
-    suma += total ;
-  });
-  return suma;
-  }
-
-  totalPagado() {
-    return (this.ventasFiltradas || []).filter(v => v.estado === 'pagado').reduce((s, v) => s + (Number(v.total) || 0), 0);
-  }
+  
 
   
   exportarCSV() { /* preparar CSV y descargar */ }

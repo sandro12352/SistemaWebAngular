@@ -22,7 +22,6 @@ export class SidebarComponent implements OnInit{
       if (usuarioGuardado) {
       this.usuario = JSON.parse(usuarioGuardado);
       this.rol = this.usuario.rol;
-      console.log(this.rol)
   }
   }
 

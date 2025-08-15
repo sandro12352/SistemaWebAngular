@@ -19,8 +19,11 @@ export class AuthService {
 
 
   validarLogin(email: string, password: string): Observable<Usuario> {
+    
     return this.http.post<Usuario>(`${envs.api}/auth/login`, { email, password }).pipe(
-      tap((res:any) => localStorage.setItem('usuario', JSON.stringify(res.usuario))) // almacena el usuario al hacer login
+      tap((res:any) =>{
+        localStorage.setItem('usuario', JSON.stringify(res.usuario))
+      } ) // almacena el usuario al hacer login
     );
   }
 

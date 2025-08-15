@@ -10,6 +10,7 @@ export interface Usuario {
   usuario_id?: number;
   trabajador_id?: number;
   email: string;
+  nombre_usuario:string,
   contrasena: string;
   rol: RolUsuario;
   trabajador:Trabajador

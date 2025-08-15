@@ -17,14 +17,9 @@ export class TopbarComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private trabajadorService:TrabajdorService,
   ) {}
 
    ngOnInit(): void {
-      this.trabajadorService.getTrabajadores().subscribe(resp=>{
-        this.trabajadores = resp;
-      })
-
      const usuarioGuardado = localStorage.getItem('usuario');
      if (usuarioGuardado) {
       this.usuario = JSON.parse(usuarioGuardado);
@@ -32,13 +27,9 @@ export class TopbarComponent implements OnInit {
    
 
   }
+  
 
-  getNombreTrabajador(trabajador_id: number): string {
-  const trabajador = this.trabajadores?.find(t => t.trabajador_id === trabajador_id);
-  return trabajador 
-    ? `${trabajador.nombre} ${trabajador.apellidos || ''}` 
-    : '';
-}
+  
 
 
   logout() {

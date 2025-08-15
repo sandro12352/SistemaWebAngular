@@ -113,7 +113,7 @@ export class RegistrarVentaComponent implements OnInit{
     next: (resp) => {
       this.loadingCliente = false; // termina la carga
       if (resp) {
-        this.cliente = resp;
+        this.cliente = {...resp};
       } else {
         this.mensajeErrorDni = 'Cliente no encontrado. "Registrar cliente".';
       }
@@ -125,7 +125,7 @@ export class RegistrarVentaComponent implements OnInit{
       this.busquedaRealizada = true;
     }
   });
-}
+  }
 
 
   guardarCliente() {
