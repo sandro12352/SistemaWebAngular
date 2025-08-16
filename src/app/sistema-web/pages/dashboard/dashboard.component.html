@@ -1,1 +1,46 @@
-<p>dashboard works!</p>
+<!-- dashboard.component.html -->
+<div class="container-fluid p-4">
+  <!-- Header del Dashboard -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Dashboard</h2>
+    <button class="btn btn-outline-primary">Actualizar</button>
+  </div>
+
+  <!-- Métricas principales -->
+  <div class="row mb-4">
+    <div class="col-md-3 mb-3" *ngFor="let metric of metrics">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ metric.title }}</h5>
+          <h3 class="card-text">{{ metric.value }}</h3>
+          <p class="text-muted mb-0">{{ metric.subtitle }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráficos -->
+  <div class="row">
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          Ventas Mensuales
+        </div>
+        <div class="card-body">
+          <canvas id="salesChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          Usuarios Activos
+        </div>
+        <div class="card-body">
+          <canvas id="usersChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

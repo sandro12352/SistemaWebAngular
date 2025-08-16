@@ -135,20 +135,20 @@
                 <i class="bi bi-cash-stack"></i> Pagado
               </button>
               <button 
-  *ngIf="venta.estado === 'pendiente' || venta.estado === 'cancelado'" 
-  class="btn btn-sm btn-outline-dark me-1" 
-  (click)="marcarEnviado(venta)"
-  [disabled]="venta.estado === 'cancelado'">
-  <i class="bi bi-truck"></i> Enviado
+                  *ngIf="venta.estado === 'pendiente' || venta.estado === 'cancelado'" 
+                  class="btn btn-sm btn-outline-dark me-1" 
+                  (click)="marcarEnviado(venta)"
+                  [disabled]="venta.estado === 'cancelado' || usuarioActual?.rol==='ventas'">
+                  <i class="bi bi-truck"></i> Enviado
             </button>
 
              <!-- Botón Anular -->
-<button 
-  class="btn btn-sm btn-outline-danger me-1"
-  (click)="anularVenta(venta)"
-  [disabled]="venta.estado === 'pagado' || venta.estado === 'cancelado'">
-  <i class="bi bi-x-circle"></i> Anular
-</button>
+            <button 
+              class="btn btn-sm btn-outline-danger me-1"
+              (click)="anularVenta(venta)"
+              [disabled]="venta.estado === 'pagado' || venta.estado === 'cancelado'|| usuarioActual?.rol==='ventas'">
+              <i class="bi bi-x-circle"></i> Anular
+            </button>
 
             </td>
 

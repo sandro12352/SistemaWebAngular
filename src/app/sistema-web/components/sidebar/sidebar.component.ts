@@ -10,7 +10,6 @@ export class SidebarComponent implements OnInit{
  
   
   isVisible = true;
-  isAnimating = false;
   rol!:string;
   usuario!:Usuario;
 

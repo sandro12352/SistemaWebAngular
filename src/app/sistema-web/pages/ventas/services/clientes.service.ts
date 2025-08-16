@@ -22,9 +22,22 @@ export class ClientesService {
     return this.http.post<Cliente>(`${envs.api}/clientes`,cliente)
   }
 
+  buscarCliente(valor: string): Observable<Cliente> {
+    let params: any = {};
 
+    // Detectar si es DNI o teléfono
+    if (/^\d{8}$/.test(valor)) {
+      // 8 dígitos → DNI
+      params.dni = valor;
+    } 
+    if (/^\d{9}$/.test(valor)) {
+      // 9 dígitos → Teléfono (ejemplo, ajusta a tu caso)
+      params.telefono = valor;
+    } 
 
-  buscarPorDni(dni:string):Observable<Cliente>{
-    return this.http.get<Cliente>(`${envs.api}/clientes/${dni}`)
+    return this.http.get<Cliente>(`${envs.api}/clientes/buscar`, { params });
   }
+
+
+
 }

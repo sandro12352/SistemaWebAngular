@@ -3,10 +3,11 @@ import { Venta } from '../../interfaces/venta.interface';
 import { UsuariosService } from '../../../../../auth/services/usuarios.service';
 import { ClientesService } from '../../services/clientes.service';
 import { VentasService } from '../../services/ventas.service';
-import { Usuario } from '../../../../../auth/interfaces/usuarios.interface';
+import { RolUsuario, Usuario } from '../../../../../auth/interfaces/usuarios.interface';
 import { Cliente } from '../../interfaces/cliente.interface';
 import { DetalleVenta } from '../../interfaces/detalleVenta.interface';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../../../../auth/services/auth.service';
 declare var bootstrap: any;
 @Component({
   selector: 'app-listado-ventas',
@@ -17,6 +18,9 @@ export class ListadoVentasComponent implements OnInit,OnChanges{
     private modalInstance: any = null;
    @Input() clienteId?: number; // viene de fuera
    @Input() mostrarResumen: boolean = false;
+
+
+   usuarioActual: Usuario | null = null;
 
    
   ventas: Venta[] = [];                // todas las ventas recibidas del backend
@@ -43,8 +47,13 @@ export class ListadoVentasComponent implements OnInit,OnChanges{
   constructor(
       private ventaService:VentasService,
       private clienteService:ClientesService,
-      private usuariService:UsuariosService,
-  ){}
+      private usuarioService:UsuariosService,
+      private authService:AuthService,
+  ){
+  }
+
+
+  
   ngOnChanges(changes: SimpleChanges): void {
      if (changes['clienteId'] && this.clienteId) {
       this.cargarVentas();
@@ -54,11 +63,14 @@ export class ListadoVentasComponent implements OnInit,OnChanges{
   ngOnInit(): void {
    this.cargarVentas();
 
+     this.usuarioActual = this.authService.obtenerUsuarioActual();
+
+
    this.clienteService.getClientes().subscribe(clientes=>{
     this.clientes = clientes;
    })
 
-   this.usuariService.getUsuarios().subscribe(usuarios=>{
+   this.usuarioService.getUsuarios().subscribe(usuarios=>{
     this.usuarios = usuarios;
    })
 

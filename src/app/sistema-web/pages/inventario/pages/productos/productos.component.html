@@ -48,7 +48,7 @@
       <tr *ngFor="let producto of productos">
         <td>{{ producto.producto_id }}</td>
         <td>{{ producto.nombre }}</td>
-        <td>{{ producto.proveedor?.nombre }}</td>
+        <td>{{ producto.proveedor?.razon_social }}</td>
         <td>{{ producto.categoria?.nombre }}</td>
         <td>S/{{ producto.valor_compra }}</td>
         <td>S/{{ producto.valor_venta }}</td>

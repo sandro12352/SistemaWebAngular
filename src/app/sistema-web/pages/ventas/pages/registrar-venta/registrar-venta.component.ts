@@ -24,9 +24,9 @@ export class RegistrarVentaComponent implements OnInit{
 
   usuario!:Usuario;
   registrarClienteForm:FormGroup;
-  dniCliente?: string;
+  valorBusqueda ?: string;
   mensajeError: string | null = null;
-  mensajeErrorDni?:string;
+  ErrorBusqueda?:string;
   cliente: Cliente | null = null;
   busquedaRealizada: boolean = false;
   nuevoCliente: Cliente = { dni: '', nombre: '', email: '', direccion: '' ,apellidos:'',telefono:'',departamento:''};
@@ -99,33 +99,34 @@ export class RegistrarVentaComponent implements OnInit{
   buscarCliente() {
   // Reiniciar estados
   this.cliente = null;
-  this.mensajeErrorDni = '';
-  this.loadingCliente = false;
+  this.ErrorBusqueda = '';
   this.busquedaRealizada = false;
 
-  if (!this.dniCliente || this.dniCliente.trim() === '') {
-    this.mensajeErrorDni = 'Debe agregar un DNI';
+  if (!this.valorBusqueda || this.valorBusqueda.trim() === '') {
+    this.ErrorBusqueda = 'Debe agregar un DNI o teléfono';
     return;
   }
 
-  this.loadingCliente = true; // empieza la carga
-  this.clienteService.buscarPorDni(this.dniCliente).subscribe({
+  this.loadingCliente = true;
+
+  this.clienteService.buscarCliente(this.valorBusqueda).subscribe({
     next: (resp) => {
-      this.loadingCliente = false; // termina la carga
+      this.loadingCliente = false;
       if (resp) {
-        this.cliente = {...resp};
+        this.cliente = { ...resp };
       } else {
-        this.mensajeErrorDni = 'Cliente no encontrado. "Registrar cliente".';
+        this.ErrorBusqueda = 'Cliente no encontrado. "Registrar cliente".';
       }
       this.busquedaRealizada = true;
     },
     error: () => {
-      this.loadingCliente = false; // termina la carga
-      this.mensajeErrorDni = 'Ocurrió un error al buscar el cliente.';
+      this.loadingCliente = false;
+      this.ErrorBusqueda = 'Ocurrió un error al buscar el cliente.';
       this.busquedaRealizada = true;
     }
   });
   }
+
 
 
   guardarCliente() {
@@ -144,7 +145,7 @@ export class RegistrarVentaComponent implements OnInit{
   this.clienteService.crearCliente(this.nuevoCliente).subscribe({
     next: (cliente) => {
       this.cliente = cliente;
-      this.dniCliente='';
+      this.valorBusqueda='';
       this.busquedaRealizada = true;
       this.registrarClienteForm.reset();
       const modalElement = document.getElementById('modalCliente');
@@ -174,7 +175,7 @@ export class RegistrarVentaComponent implements OnInit{
 
       // Si no escribe precio, usar el precio original
     const precioUnitario = this.precioVentaSeleccionado && this.precioVentaSeleccionado > 0
-      ? this.precioVentaSeleccionado
+      ? this.precioVentaSeleccionado/this.cantidadSeleccionada
       : producto.valor_venta;
 
     const yaExiste = this.productosVenta.find(p => p.producto_id === producto.producto_id);
@@ -306,7 +307,7 @@ export class RegistrarVentaComponent implements OnInit{
   limpiarRegistro(){
     this.productosVenta = [];
     this.registrarClienteForm.reset();
-    this.dniCliente = '';
+    this.valorBusqueda = '';
     this.canalVentaSeleccionado = '';
     this.cliente = null; 
     this.precioVentaSeleccionado = 0;

@@ -5,15 +5,15 @@
   <div class="row g-3 align-items-end">
   <!-- Input para buscar por DNI -->
   <div class="col-md-4">
-    <label for="dni" class="form-label">Buscar cliente por DNI:</label>
+    <label for="dni" class="form-label">Buscar cliente por DNI o Telefono:</label>
     <input
       type="text"
       id="dni"
       class="form-control"
-      [(ngModel)]="dniCliente"
+      [(ngModel)]="valorBusqueda"
       name="dniCliente"
       class="form-control  shadow-sm"
-      placeholder="Ingrese DNI"
+      placeholder="Ingrese DNI o Telefono"
     />
   </div>
 
@@ -27,7 +27,7 @@
   <!-- Botón para registrar cliente si no existe -->
   <div class="col-md-3">
     <button
-      class="btn btn-outline-secondary w-100"
+      class="btn btn-success w-100"
       data-bs-toggle="modal"
       data-bs-target="#modalCliente"
     >
@@ -54,7 +54,7 @@
     <h4 class="mb-0"><strong>Datos del Cliente</strong></h4>
     <!-- Botón para abrir el modal -->
     <button 
-      class="btn btn-success btn-md px-4 shadow-sm" 
+      class="btn btn-warning btn-md px-4 shadow-sm" 
       data-bs-toggle="modal" 
       data-bs-target="#ventaModal"
       style="font-weight: 600; letter-spacing: 0.5px;">
@@ -204,8 +204,8 @@
  
 
 <!-- Mensaje de error -->
-  <div *ngIf="!loadingCliente && mensajeErrorDni" class="alert alert-danger mt-3">
-    {{ mensajeErrorDni }}
+  <div *ngIf="!loadingCliente && ErrorBusqueda" class="alert alert-danger mt-3">
+    {{ ErrorBusqueda }}
   </div>
 
 </div>

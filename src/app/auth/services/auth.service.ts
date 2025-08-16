@@ -12,18 +12,20 @@ export class AuthService {
   private usuarioSubject = new BehaviorSubject<Usuario | null>(null);
   usuario$ = this.usuarioSubject.asObservable();
 
-    constructor(
-    private http:HttpClient
-  ) { }
-  
-
+    constructor(private http: HttpClient) {
+    // al iniciar el servicio, revisa si hay usuario en localStorage
+    const user = localStorage.getItem('usuario');
+    if (user) {
+      this.usuarioSubject.next(JSON.parse(user));
+    }
+  }
 
   validarLogin(email: string, password: string): Observable<Usuario> {
-    
     return this.http.post<Usuario>(`${envs.api}/auth/login`, { email, password }).pipe(
-      tap((res:any) =>{
-        localStorage.setItem('usuario', JSON.stringify(res.usuario))
-      } ) // almacena el usuario al hacer login
+      tap((res: any) => {
+        localStorage.setItem('usuario', JSON.stringify(res.usuario));
+        this.usuarioSubject.next(res.usuario); // ✅ actualiza el BehaviorSubject
+      })
     );
   }
 
@@ -31,8 +33,8 @@ export class AuthService {
     return this.usuarioSubject.value;
   }
 
-  cerrarSesion() {
+  logout(): void {
+    localStorage.removeItem('usuario');
     this.usuarioSubject.next(null);
   }
-  
 }
